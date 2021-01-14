@@ -1,0 +1,282 @@
+" All system-wide defaults ar" All system-wide defaults ae set in $VIMRUNTIME/debian.vim (usually just
+" /usr/share/vim/vimcurrent/debian.vim) and sourced by the call to :runtime
+" you can find below.  If you wish to change any of those settings, you should
+" do it in this file (/etc/vim/vimrc), since debian.vim will be overwritten
+" everytime an upgrade of the vim packages is performed.  It is recommended to
+" make changes after sourcing debian.vim since it alters the value of the
+" 'compatible' option.
+" This line should not be removed as it ensures that various options are
+" properly set to work with the Vim-related packages available in Debian.
+runtime! debian.vim
+runtime! cmdalias.vim
+" Uncomment the next line to make Vim more Vi-compatible
+" NOTE: debian.vim sets 'nocompatible'.  Setting 'compatible' changes numerous
+" options, so any other options should be set AFTER setting 'compatible'.
+"set compatible
+
+" Vim5 and later versions support syntax highlighting. Uncommenting the next
+" line enables syntax highlighting by default.
+if has("syntax")
+  syntax on
+endif
+
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+" Uncomment the following to have Vim load indentation rules and plugins
+" according to the detected filetype.
+if has("autocmd")
+  filetype plugin indent on
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" sample function definition
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! VundlePlugin(plugin_repos)
+  if filereadable(plugin_repos)
+    echo plugin_repos
+  else
+    echo "File : not found."
+  endif
+  echo ""
+endfunction
+
+""""""""""""""
+" key mapping
+""""""""""""""
+nmap <F2> :TlistToggle <CR>
+nmap <F3> :NERDTreeToggle <CR>
+nmap <F4> :PluginInstall <CR>
+nmap <F7> :if exists("syntax_on") <BAR>
+\ syntax off <BAR><CR>
+\ else <BAR>
+\ syntax enable <BAR>
+\ endif <CR>
+
+nmap <F8> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' > cscope.files<CR>
+  \:!cscope -b -i cscope.files -f cscope.out<CR>
+  \:!ctags -R<CR>
+  \:cs reset<CR>
+
+nmap ? :ls
+nmap ctp :CtrlP <CR>
+""""""""""""""""
+" cscope hot-key
+""""""""""""""""
+nmap cc :cs find c
+nmap cg :cs find g 
+nmap cc :cs find c 
+nmap ce :cs find e 
+nmap cf :cs find f 
+nmap cg :cs find g 
+nmap ci :cs find i 
+nmap cd :cs find d 
+nmap ch :cs help 
+nmap cs :cs show 
+
+set nu  "enable line number;
+
+set cursorline  "enable cursor line;
+" Default Colors for CursorLine
+"highlight  CursorLine ctermbg=lightcyan ctermfg=yellow
+"highlight  CursorLine ctermbg=lightcyan ctermfg=red
+"highlight  CursorLine ctermbg=red ctermfg=yellow
+highlight  CursorLine ctermbg=yellow ctermfg=red
+" Change Color when entering Insert Mode
+autocmd InsertEnter * highlight  CursorLine ctermbg=red ctermfg=white
+" Revert Color to default when leaving Insert Mode
+autocmd InsertLeave * highlight  CursorLine ctermbg=blue ctermfg=yellow
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"(1) manual – folds must be defined by entering commands
+"(2) indent – groups of lines with the same indent form a fold
+"(3) syntax – folds are defined by syntax highlighting
+"(3) expr – folds are defined by a user-defined expression
+"(4) marker – special characters can be manually or automatically added to your
+"             text to flag the start and end of folds
+"(5) diff – used to fold unchanged text when viewing differences
+set foldmethod=syntax
+set foldlevel=1
+set foldcolumn=4
+set foldnestmax=3
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 顯示行列位置
+set ruler
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 自動找對應括號
+set showmatch
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 啟用自動縮排
+set autoindent
+"
+set cmdheight=1 "command line height
+"
+" do not keep a backup files 
+set nobackup
+set nowritebackup
+"
+set history=99  "command history stack
+set showcmd "show partial command"
+set incsearch "incremental searches
+set list  "show tab
+set ignorecase smartcase  "ignore case sensitive
+set laststatus=1  "status bar
+set showmatch "show matching bracket
+"
+" Java specific stuff
+let java_highlight_all=1
+let java_highlight_debug=1
+let java_ignore_javadoc=1
+let java_highlight_functions=1
+let java_mark_braces_in_parens_as_errors=1
+"
+let c_comment_strings=1
+"
+set hls
+" match string color 
+hi Search term=reverse ctermbg=yellow ctermfg=red
+"
+set nowrapscan
+"
+" status line display 
+set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%L%)\ 
+"
+syntax enable
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+"
+" Source a global configuration file if available
+if filereadable("/etc/vim/vimrc.local")
+  source /etc/vim/vimrc.local
+endif
+"
+set ic
+set is
+set vb
+set confirm
+set noswapfile
+"
+" set mouse=nv
+"""""""""
+" Vundle 
+"""""""""
+set nocompatible
+filetype off
+
+"Plugin manager Vundle setup 
+let iCanHazVundleInitial=1
+let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
+if !filereadable(vundle_readme)
+  echo "Installing Vundle..."
+  echo ""
+  silent !mkdir -p ~/.vim/bundle
+  silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  let iCanHazVundleInitial=0
+endif
+
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+
+" vundle manage Vundle
+Plugin 'gmarik/Vundle.vim'
+
+" Eidte repos on github
+
+Plugin 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plugin 'majutsushi/tagbar'
+Plugin 'autoload_cscope.vim'
+Plugin 'taglist.vim'
+"
+" File fuzzy search
+Plugin 'kien/ctrlp.vim'
+" Function symbol fuzzy search
+Plugin 'tacahiroy/ctrlp-funky'
+"
+"VimGrep
+Plugin 'grep.vim'
+"
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'Townk/vim-autoclose'
+Plugin 'tomtom/tcomment_vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'honza/vim-snippets'
+Plugin 'garbas/vim-snipmate'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+
+call vundle#end()           " required
+
+" Ctrlp configuration
+let g:ctrlp_map = '<leader>p'
+let g:ctrlp_cmd = 'CtrlP'
+map <leader>f :CtrlPMRU<CR>
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+    \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
+    \ }
+let g:ctrlp_working_path_mode=0
+let g:ctrlp_match_window_bottom=1
+let g:ctrlp_max_height=10
+let g:ctrlp_match_window_reversed=0
+let g:ctrlp_mruf_max=200
+let g:ctrlp_follow_symlinks=1
+"
+" ignore file in .gitigore
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
+" ignore file type
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux"
+"
+" CtrlpFunky configuration
+nnoremap <Leader>fu :CtrlPFunky<Cr>
+" narrow the list down with a word under cursor
+nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+let g:ctrlp_funky_syntax_highlight = 1
+let g:ctrlp_extensions = ['funky']
+
+" YouCompleteMe unavailable: requires Vim 8.1.2269+
+set runtimepath+=~/.vim/bundle/YouCompleteMe
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:syntastic_ignore_files=[".*/.py$"]
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_complete_in_comments = 1
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_key_list_select_completion = ['<c-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<c-p>', '<Up>']
+let g:ycm_complete_in_comments = 1
+let g:ycm_complete_in_strings = 1
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_min_num_of_chars_for_completion=2
+
+" color scheme
+set t_Co=175
+set background=dark
+"colorscheme solarized
+"colorscheme molokai
+"
+filetype on
+filetype plugin on
+filetype plugin indent on " required
+
+" Pluin initialized
+" :PluginList          - list configured plugins
+" :PluginInstall(!)    - install (update) plugins
+" :PluginSearch(!) foo - search (or refresh cache first) for foo
+" :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
+if !iCanHazVundleInitial
+  :PluginClean
+  echo "Installing Vundle-Plugin..."
+  echo ""
+  :PluginInstall
+endif
+
